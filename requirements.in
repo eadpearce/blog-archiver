@@ -2,3 +2,5 @@ python-dotenv
 requests
 black
 pip-tools
+django
+django-environ
