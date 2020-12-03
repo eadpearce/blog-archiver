@@ -16,4 +16,10 @@
 
 <p>{{ blog.total_posts }} post{{ blog.total_posts|pluralize }}</p>
 
+<form method="post">
+  {% csrf_token %}
+  {{ form }}
+  <input type="submit" value="Get posts">
+</form>
+
 {% endblock %}

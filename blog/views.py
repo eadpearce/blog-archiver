@@ -1,9 +1,11 @@
 from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404
 from django.contrib import messages
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView
 
-from blog.forms import CreateBlogForm
+from blog.forms import CreateBlogForm, GetPostsForm
 from blog.models import Blog
+from post.models import Post
 
 
 class Index(FormView):
@@ -45,15 +47,40 @@ class Index(FormView):
         )
 
 
-class BlogDetail(TemplateView):
+class BlogDetail(FormView):
     template_name = 'blog/detail.html'
+    form_class = GetPostsForm
 
     @property
     def blog(self):
-        return Blog.objects.get(name=self.kwargs['name'])
+        return get_object_or_404(Blog, name=self.kwargs['name'])
+
+    def get_success_url(self):
+        return reverse_lazy('blog-detail', kwargs=self.kwargs)
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(
             blog=self.blog,
             **kwargs
         )
+
+    def form_valid(self, form):
+        response, status_code = form.get_posts(self.kwargs['name'])
+        posts = response['response']['posts']
+
+        for post in posts:
+            new_post = {
+                field.name: post[field.name]
+                for field in Post._meta.get_fields()
+                if field.name != 'blog' and post.get(field.name)
+            }
+
+            if Post.objects.filter(id=new_post['id']).exists():
+                continue
+
+            Post.objects.create(
+                blog=self.blog,
+                **new_post
+            )
+
+        return super().form_valid(form)
