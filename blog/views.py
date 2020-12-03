@@ -8,6 +8,14 @@ from blog.models import Blog
 from post.models import Post
 
 
+def get_necessary_fields(data, model_class, exclude=None):
+    return {
+        field.name: data[field.name]
+        for field in model_class._meta.get_fields()
+        if field.name != exclude and data.get(field.name)
+    }
+
+
 class Index(FormView):
     template_name = "blog/index.html"
     form_class = CreateBlogForm
@@ -22,14 +30,10 @@ class Index(FormView):
 
         if status_code != 200:
             messages.error(self.request, f'Got {status_code} from Tumblr API')
-            return super().form_valid(form)
 
         blog_info = json['response']['blog']
 
-        new_blog = {
-            field.name: blog_info[field.name]
-            for field in Blog._meta.get_fields()
-        }
+        new_blog = get_necessary_fields(blog_info, Blog, exclude='posts')
 
         if Blog.objects.filter(uuid=new_blog['uuid']).exists():
             return super().form_valid(form)
@@ -65,15 +69,15 @@ class BlogDetail(FormView):
         )
 
     def form_valid(self, form):
-        response, status_code = form.get_posts(self.kwargs['name'])
-        posts = response['response']['posts']
+        json, status_code = form.get_posts(self.kwargs['name'])
+
+        if status_code != 200:
+            messages.error(self.request, f'Got {status_code} from Tumblr API')
+
+        posts = json['response']['posts']
 
         for post in posts:
-            new_post = {
-                field.name: post[field.name]
-                for field in Post._meta.get_fields()
-                if field.name != 'blog' and post.get(field.name)
-            }
+            new_post = get_necessary_fields(post, Post, exclude='blog')
 
             if Post.objects.filter(id=new_post['id']).exists():
                 continue
