@@ -1,4 +1,5 @@
 from django.urls import reverse_lazy
+from django.contrib import messages
 from django.views.generic import FormView
 
 from blog.forms import CreateBlogForm
@@ -15,7 +16,14 @@ class Index(FormView):
         return Blog.objects.all()
 
     def form_valid(self, form):
-        blog_info = form.get_blog_info()
+        json, status_code = form.get_blog_info()
+
+        if status_code != 200:
+            messages.error(self.request, f'Got {status_code} from Tumblr API')
+            return super().form_valid(form)
+
+        blog_info = json['response']['blog']
+
         new_blog = {
             field.name: blog_info[field.name]
             for field in Blog._meta.get_fields()
@@ -25,6 +33,9 @@ class Index(FormView):
             return super().form_valid(form)
 
         Blog.objects.create(**new_blog)
+
+        messages.success(self.request, f"Blog {blog_info['name']} added!")
+
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

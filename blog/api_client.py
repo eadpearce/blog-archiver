@@ -21,5 +21,4 @@ def get_blog_info(
     endpoint = ENDPOINTS['info']
     url = f"{BASE_URL}{blog_name}.tumblr.com{endpoint}?{urlencode(params)}"
     response = requests.get(url)
-    response.raise_for_status()
-    return response.json()['response']['blog']
+    return response.json(), response.status_code
