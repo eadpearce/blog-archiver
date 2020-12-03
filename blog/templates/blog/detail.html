@@ -22,4 +22,11 @@
   <input type="submit" value="Get posts">
 </form>
 
+<ol>
+  {% for post in blog.posts.all %}
+    <li>{{ post.summary }}</li>
+  {% endfor %}
+</ol>
+
+
 {% endblock %}
