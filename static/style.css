@@ -1,0 +1,30 @@
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 5px;
+}
+
+a {
+  display: block;
+}
+
+.error {
+  background-color: #ee0000;
+  color: white;
+}
+
+.success {
+  background-color: #009900;
+  color: white;
+}
+
+.warning {
+  background-color: #ddcc00;
+  color: white;
+}
+
+.info {
+  background-color: #5599cc;
+  color: white;
+}

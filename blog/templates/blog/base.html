@@ -1,28 +1,15 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     <title>Tumblr blog archiver</title>
-    <style media="screen">
-      .error {
-        background-color: #ee0000;
-        color: white;
-      }
-      .success {
-        background-color: #009900;
-        color: white;
-      }
-      .warning {
-        background-color: #ddcc00;
-        color: white;
-      }
-      .info {
-        background-color: #5599cc;
-        color: white;
-      }
-    </style>
+    {% block head %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
   </head>
   <body>
     {% block content %}{% endblock %}
   </body>
+  {% block post_body %}{% endblock %}
 </html>

@@ -1,0 +1,13 @@
+
+<div class="post">
+  {% for t in post.trail %}
+    {% for c in t.content %}
+      {% if c.type == 'image' %}
+        <img src="{{ c.media.0.url }}" alt="">
+      {% else %}
+        <p>{{ c.text }}</p>
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+  <p><a href="{{ post.source_url }}">Source</a></p>
+</div>
