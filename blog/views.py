@@ -1,6 +1,6 @@
 from django.urls import reverse_lazy
 from django.contrib import messages
-from django.views.generic import FormView
+from django.views.generic import FormView, TemplateView
 
 from blog.forms import CreateBlogForm
 from blog.models import Blog
@@ -41,5 +41,19 @@ class Index(FormView):
     def get_context_data(self, **kwargs):
         return super().get_context_data(
             blogs=self.blogs,
+            **kwargs
+        )
+
+
+class BlogDetail(TemplateView):
+    template_name = 'blog/detail.html'
+
+    @property
+    def blog(self):
+        return Blog.objects.get(name=self.kwargs['name'])
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            blog=self.blog,
             **kwargs
         )

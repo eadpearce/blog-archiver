@@ -18,7 +18,7 @@
   </form>
   <ul>
     {% for blog in blogs %}
-      <li>{{ blog.name }}</li>
+      <li><a href="{% url 'blog-detail' blog.name %}">{{ blog.name }}</a></li>
     {% endfor %}
   </ul>
 {% endblock %}

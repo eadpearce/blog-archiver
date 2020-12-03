@@ -1,0 +1,19 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<nav aria-label="Breadcrumb" class="breadcrumb">
+  <ol>
+    <li><a href="{% url 'index' %}">Home</a></li>
+    <li aria-current="page">{{ blog.name }}</li>
+  </ol>
+</nav>
+
+<h1><a href="{{ blog.url }}">{{ blog.name }}</a></h1>
+<h2>{{ blog.title }}</h2>
+<div>
+  {{ blog.description|safe }}
+</div>
+
+<p>{{ blog.total_posts }} post{{ blog.total_posts|pluralize }}</p>
+
+{% endblock %}
