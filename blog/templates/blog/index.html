@@ -1,0 +1,15 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+  <h1>Tumblr blog archiver</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" name="" value="Get blog info">
+  </form>
+  <ul>
+    {% for blog in blogs %}
+      <li>{{ blog.name }}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
