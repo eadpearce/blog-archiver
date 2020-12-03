@@ -6,7 +6,9 @@ class Post(models.Model):
     blog = models.ForeignKey(
         Blog,
         on_delete=models.CASCADE,
-        related_name='+'
+        related_name='posts',
+        null=True,
+        blank=True
     )
     id = models.IntegerField(primary_key=True, editable=False)
     type = models.CharField(max_length=100)
