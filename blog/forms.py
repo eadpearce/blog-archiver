@@ -14,5 +14,5 @@ class GetPostsForm(forms.Form):
     limit = forms.IntegerField()
     offset = forms.IntegerField()
 
-    def get_posts(self, blog_name):
-        return api_client.get_posts(blog_name=blog_name)
+    def get_posts(self, blog_name, **kwargs):
+        return api_client.get_posts(blog_name=blog_name, **kwargs)

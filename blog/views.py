@@ -69,7 +69,7 @@ class BlogDetail(FormView):
         )
 
     def form_valid(self, form):
-        json, status_code = form.get_posts(self.kwargs['name'])
+        json, status_code = form.get_posts(self.kwargs['name'], **form.cleaned_data)
 
         if status_code != 200:
             messages.error(self.request, f'Got {status_code} from Tumblr API')
