@@ -2,6 +2,10 @@
 
 Do you have a tumblog you've spent years curating that you'd like to archive so you can look through it offline? This may be the handy tool for you.
 
+## Disclaimer
+
+This app is for personal use and is not meant to be deployed to a live environment. Please don't use this to make a website that is a clone of Tumblr. For more information please read the [API License Agreement](https://www.tumblr.com/docs/en/api_agreement).
+
 ## Requirements
 
 * Python 3.9
