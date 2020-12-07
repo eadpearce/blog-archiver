@@ -1,8 +1,14 @@
 # Tumblr blog archiver
 
+Do you have a tumblog you've spent years curating that you'd like to archive so you can look through it offline? This may be the handy tool for you.
+
+## Requirements
+
+* Python 3.9
+
 ## Setup
 
-Set up a virtual environment. This project uses python version 3.9.0. I like to use [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/stable/):
+Set up a virtual environment. I like to use [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/stable/):
 
 ```
 mkvirtualenv --python=python3.9 yourvirtualenvname
