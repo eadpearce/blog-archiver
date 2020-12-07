@@ -5,15 +5,7 @@ from django.views.generic import FormView
 
 from blog.forms import CreateBlogForm, GetPostsForm
 from blog.models import Blog
-from post.models import Post
-
-
-def get_necessary_fields(data, model_class, exclude=None):
-    return {
-        field.name: data[field.name]
-        for field in model_class._meta.get_fields()
-        if field.name != exclude and data.get(field.name)
-    }
+from post.models import Post, Block, Reblog
 
 
 class Index(FormView):
@@ -33,12 +25,17 @@ class Index(FormView):
 
         blog_info = json['response']['blog']
 
-        new_blog = get_necessary_fields(blog_info, Blog, exclude='posts')
-
-        if Blog.objects.filter(uuid=new_blog['uuid']).exists():
+        if Blog.objects.filter(uuid=blog_info['uuid']).exists():
             return super().form_valid(form)
 
-        Blog.objects.create(**new_blog)
+        Blog.objects.create(
+            avatar=blog_info['avatar'],
+            description=blog_info['description'],
+            name=blog_info['name'],
+            title=blog_info['title'],
+            total_posts=blog_info['total_posts'],
+            url=blog_info['url'],
+        )
 
         messages.success(self.request, f"Blog {blog_info['name']} added!")
 
@@ -77,14 +74,38 @@ class BlogDetail(FormView):
         posts = json['response']['posts']
 
         for post in posts:
-            new_post = get_necessary_fields(post, Post, exclude='blog')
+            # new_post = get_necessary_fields(post, Post, exclude='blog')
 
-            if Post.objects.filter(id=new_post['id']).exists():
+            if Post.objects.filter(id=post['id']).exists():
                 continue
 
-            Post.objects.create(
+            new_post = Post.objects.create(
                 blog=self.blog,
-                **new_post
+                id=post['id'],
+                type=post['type'],
+                post_url=post['post_url'],
+                tags=post.get('tags', ''),
+                summary=post['summary'],
+                source_url=post.get('source_url', ''),
+                content=post.get('content', ''),
+                layout=post.get('layout', ''),
             )
+
+            for reblog in post['trail']:
+                new_reblog = Reblog.objects.create(post=new_post)
+
+                for block in reblog['content']:
+
+                    url = ''
+
+                    if block.get('media'):
+                        url = block.get('media')[0]['url']
+
+                    new_block = Block.objects.create(
+                        reblog=new_reblog,
+                        text=block.get('text'),
+                        url=url,
+                    )
+                    new_block.save()
 
         return super().form_valid(form)

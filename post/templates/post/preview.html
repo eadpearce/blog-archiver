@@ -1,13 +1,17 @@
 
 <div class="post">
-  {% for t in post.trail %}
-    {% for c in t.content %}
-      {% if c.type == 'image' %}
-        <img src="{{ c.media.0.url }}" alt="">
-      {% else %}
-        <p>{{ c.text }}</p>
+  {% for reblog in post.reblogs.all %}
+
+    {% for content_block in reblog.blocks.all %}
+
+      {% if content_block.text %}
+      <p>{{ content_block.text }}</p>
+      {% elif content_block.image %}
+      <img src="{{ content_block.image.url }}" alt="">
       {% endif %}
+
     {% endfor %}
+
   {% endfor %}
   <p><a href="{{ post.source_url }}">Source</a></p>
 </div>

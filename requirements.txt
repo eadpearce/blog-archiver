@@ -15,6 +15,7 @@ django==3.1.4             # via -r requirements.in
 idna==2.10                # via requests
 mypy-extensions==0.4.3    # via black
 pathspec==0.8.1           # via black
+pillow==8.0.1             # via -r requirements.in
 pip-tools==5.4.0          # via -r requirements.in
 python-dotenv==0.15.0     # via -r requirements.in
 pytz==2020.4              # via django

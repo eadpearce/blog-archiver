@@ -4,3 +4,4 @@ black
 pip-tools
 django
 django-environ
+pillow

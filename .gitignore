@@ -2,3 +2,4 @@ __pycache__
 .env
 blogs
 db.sqlite3
+media
